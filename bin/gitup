@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Gitup\Test;
+use TravisSouth\Gitup\Test;
 
 require __DIR__.'/../vendor/autoload.php';
 

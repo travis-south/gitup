@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Gitup\\": "src/"
+            "TravisSouth\\Gitup\\": "src/"
         }
     }
 }
