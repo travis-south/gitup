@@ -5,7 +5,19 @@ use Gitup\Test;
 
 require __DIR__.'/../vendor/autoload.php';
 
-echo "Hello world!";
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
-$test = new Test();
-$test->test();
+(new Application('echo', '1.0.0'))
+  ->register('echo')
+      ->addArgument('foo', InputArgument::OPTIONAL, 'The directory')
+      ->addOption('bar', null, InputOption::VALUE_REQUIRED)
+      ->setCode(function(InputInterface $input, OutputInterface $output) {
+          // output arguments and options
+      })
+  ->getApplication()
+  ->setDefaultCommand('echo', true) // Single command application
+  ->run();

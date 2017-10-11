@@ -1,0 +1,3 @@
+#!/bin/sh
+
+daker --entrypoint="" travissouth/composer bin/gitup "$@"
