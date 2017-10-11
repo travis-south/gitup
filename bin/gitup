@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+use Gitup\Test;
+
+require __DIR__.'/../vendor/autoload.php';
+
+echo "Hello world!";
+
+$test = new Test();
+$test->test();
