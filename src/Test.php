@@ -1,6 +1,6 @@
 <?php
 
-namespace TravisSouth\Gitup;
+namespace Gitup;
 
 class Test
 {

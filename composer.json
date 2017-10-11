@@ -1,5 +1,5 @@
 {
-    "name": "travissouth/gitup",
+    "name": "travis-south/gitup",
     "description": "Updates variables and config of your favourite git server.",
     "type": "project",
     "license": "MIT",
@@ -13,5 +13,10 @@
     "require": {
         "php": "^7.1.3",
         "pds/skeleton": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gitup\\": "src/"
+        }
     }
 }
