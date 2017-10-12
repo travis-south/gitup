@@ -13,7 +13,7 @@ class UpdateCommand extends Command
     	$this
         	->setName('update')
         	->setDescription('Adds or updates configurations and/or variables based on input')
-        	->setHelp('This command allows you to create a user...');
+        	->setHelp('This command allows you to add or update configurations and/or variables based on input');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

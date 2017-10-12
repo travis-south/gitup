@@ -11,7 +11,7 @@ use TravisSouth\Gitup\Console\Command\UpdateCommand;
 require __DIR__.'/../vendor/autoload.php';
 
 $updateCommand = new UpdateCommand();
-$application = new Application();
+$application = new Application('Gitup', '@package_version@');
 $application->add($updateCommand);
 $application->setDefaultCommand($updateCommand->getName());
 $application->run();
