@@ -9,4 +9,6 @@ WORKDIR /build
 RUN composer install \
 	&& box build
 
+WORKDIR /app
+
 ENTRYPOINT ["php", "/build/gitup.phar"]
