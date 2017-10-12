@@ -12,3 +12,5 @@ RUN composer install \
 WORKDIR /app
 
 ENTRYPOINT ["php", "/build/gitup.phar"]
+
+CMD ["--help"]
