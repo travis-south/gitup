@@ -1,23 +1,17 @@
 #!/usr/bin/env php
 <?php
 
-use TravisSouth\Gitup\Test;
-
-require __DIR__.'/../vendor/autoload.php';
-
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TravisSouth\Gitup\Console\Command\UpdateCommand;
 
-(new Application('echo', '1.0.0'))
-  ->register('echo')
-      ->addArgument('foo', InputArgument::OPTIONAL, 'The directory')
-      ->addOption('bar', null, InputOption::VALUE_REQUIRED)
-      ->setCode(function(InputInterface $input, OutputInterface $output) {
-          // output arguments and options
-      })
-  ->getApplication()
-  ->setDefaultCommand('echo', true) // Single command application
-  ->run();
+require __DIR__.'/../vendor/autoload.php';
+
+$updateCommand = new UpdateCommand();
+$application = new Application();
+$application->add($updateCommand);
+$application->setDefaultCommand($updateCommand->getName());
+$application->run();
