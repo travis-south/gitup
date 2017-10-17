@@ -1,0 +1,10 @@
+{
+    "config": {
+        "endpoint": "https://gitlab.com/api/v4/projects/276/variables/",
+        "credentials": "super-secret-token"
+    },
+    "data": {
+        "test": "kaboom",
+        "kaboom": "test"
+    }
+}
