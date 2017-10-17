@@ -13,6 +13,7 @@ use TravisSouth\Gitup\Adapters\Gitlab;
 use TravisSouth\Gitup\Config;
 use TravisSouth\Gitup\Console\Dumper;
 use Psr\Log\LogLevel;
+use TravisSouth\Gitup\Console\FileValidator;
 
 class UpdateCommand extends Command
 {
@@ -26,6 +27,7 @@ class UpdateCommand extends Command
                     new InputOption('provider', 'p', InputOption::VALUE_OPTIONAL),
                 ))
             )
+            ->addArgument('config_file', InputArgument::OPTIONAL, 'Path of your data file.')
             ->setHelp('This command allows you to update configurations and/or variables based on input');
     }
 
@@ -35,21 +37,25 @@ class UpdateCommand extends Command
             LogLevel::NOTICE => OutputInterface::VERBOSITY_NORMAL,
             LogLevel::INFO   => OutputInterface::VERBOSITY_NORMAL,
         );
+        
         $logger = new ConsoleLogger($output, $verbosityLevelMap);
         $dumper = new Dumper($output);
         $config = new Config();
+        
+        $configFile = $input->getArgument('config_file');
+        $validator = new FileValidator($configFile);
+        $data = $validator->validate();
+        $dumper->debug($data);
+        
         switch ($input->getOption('provider')) {
             default:
                 $git = new Gitlab($logger, $dumper);
                 $config->createConfig([
-                    'private_token' => 'ojhsbHaXSExqBnTyk-uS',
-                    'endpoint' => 'https://gitlab.ph.esl-asia.com/api/v4/projects/276/variables/',
+                    'private_token' => $data['config']['credentials'],
+                    'endpoint' => $data['config']['endpoint'],
                 ]);
                 $git->prepareConfig($config);
-                $git->updateConfig([
-                    'test' => 'kaboom',
-                    'kaboom' => 'test',
-                ]);
+                $git->updateConfig($data['data']);
                 break;
         }
     }

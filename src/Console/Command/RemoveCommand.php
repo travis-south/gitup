@@ -15,20 +15,20 @@ use TravisSouth\Gitup\Console\Dumper;
 use Psr\Log\LogLevel;
 use TravisSouth\Gitup\Console\FileValidator;
 
-class AddCommand extends Command
+class RemoveCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('add')
-            ->setDescription('Adds configurations and/or variables based on input')
+            ->setName('remove')
+            ->setDescription('Remove value of vars')
             ->setDefinition(
                 new InputDefinition(array(
                     new InputOption('provider', 'p', InputOption::VALUE_OPTIONAL),
                 ))
             )
             ->addArgument('config_file', InputArgument::OPTIONAL, 'Path of your data file.')
-            ->setHelp('This command allows you to add configurations and/or variables based on input');
+            ->setHelp('This command allows you to retrieve configurations and/or variables based on input');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -37,11 +37,11 @@ class AddCommand extends Command
             LogLevel::NOTICE => OutputInterface::VERBOSITY_NORMAL,
             LogLevel::INFO   => OutputInterface::VERBOSITY_NORMAL,
         );
-
+        
         $logger = new ConsoleLogger($output, $verbosityLevelMap);
         $dumper = new Dumper($output);
         $config = new Config();
-
+        
         $configFile = $input->getArgument('config_file');
         $validator = new FileValidator($configFile);
         $data = $validator->validate();
@@ -55,7 +55,7 @@ class AddCommand extends Command
                     'endpoint' => $data['config']['endpoint'],
                 ]);
                 $git->prepareConfig($config);
-                $git->addConfig($data['data']);
+                $git->removeConfig($data['data']);
                 break;
         }
     }
