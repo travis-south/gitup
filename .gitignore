@@ -39,3 +39,5 @@
 
 /vendor/
 *.phar
+
+git-config.json

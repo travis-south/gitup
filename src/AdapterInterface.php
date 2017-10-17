@@ -2,6 +2,9 @@
 
 namespace TravisSouth\Gitup;
 
+use Psr\Log\LoggerInterface;
+use TravisSouth\Gitup\ConfigInterface;
+
 interface AdapterInterface
 {
     /**
@@ -14,13 +17,22 @@ interface AdapterInterface
     public function prepareConfig(ConfigInterface $config);
 
     /**
-     * Add (or update if existing) configs to your git server.
+     * Add configs to your git server.
      *
      * @param array $list
      *
      * @return void
      */
     public function addConfig(array $list);
+
+    /**
+     * Update configs to your git server.
+     *
+     * @param array $list
+     *
+     * @return void
+     */
+    public function updateConfig(array $list);
 
     /**
      * Remove config to your git server.
@@ -30,4 +42,13 @@ interface AdapterInterface
      * @return void
      */
     public function removeConfig(array $list);
+
+    /**
+     * Retrieves config to your git server.
+     *
+     * @param mixed $list
+     *
+     * @return void
+     */
+    public function getConfig($list);
 }

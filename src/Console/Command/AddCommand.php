@@ -14,19 +14,19 @@ use TravisSouth\Gitup\Config;
 use TravisSouth\Gitup\Console\Dumper;
 use Psr\Log\LogLevel;
 
-class UpdateCommand extends Command
+class AddCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('update')
-            ->setDescription('Updates configurations and/or variables based on input')
+            ->setName('add')
+            ->setDescription('Adds configurations and/or variables based on input')
             ->setDefinition(
                 new InputDefinition(array(
                     new InputOption('provider', 'p', InputOption::VALUE_OPTIONAL),
                 ))
             )
-            ->setHelp('This command allows you to update configurations and/or variables based on input');
+            ->setHelp('This command allows you to add configurations and/or variables based on input');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -46,7 +46,7 @@ class UpdateCommand extends Command
                     'endpoint' => 'https://gitlab.ph.esl-asia.com/api/v4/projects/276/variables/',
                 ]);
                 $git->prepareConfig($config);
-                $git->updateConfig([
+                $git->addConfig([
                     'test' => 'kaboom',
                     'kaboom' => 'test',
                 ]);

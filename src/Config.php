@@ -17,10 +17,14 @@ class Config implements ConfigInterface
      */
     public function createConfig(array $config)
     {
-        $this->credentials = $config['private_token'] ??
-            throw new InvalidArgumentException('private_token key does not exist');
-        $this->endpoint = $config['endpoint'] ??
-            throw new InvalidArgumentException('endpoint key does not exist');
+        $this->credentials = $config['private_token'] ?? false;
+        if (!$this->credentials) {
+            throw new InvalidArgumentException('private_token does not exist');
+        }
+        $this->endpoint = $config['endpoint'] ?? false;
+        if (!$this->endpoint) {
+            throw new InvalidArgumentException('endpoint does not exist');
+        }
     }
 
     /**
