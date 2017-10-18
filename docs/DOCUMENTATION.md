@@ -9,7 +9,7 @@ Create git-config.json file with the following structure:
 ```json
 {
     "config": {
-        "endpoint": "https://gitlab.com/api/v4/projects/276/variables/",
+        "endpoint": "https://gitlab.com/api/v4/projects/<insert project id here>/variables/",
         "credentials": "super-secret-token"
     },
     "data": {
