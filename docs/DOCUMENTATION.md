@@ -19,8 +19,14 @@ Create git-config.json file with the following structure:
 }
 ```
 
-Then run this docker command:
+Then run this docker command to view all available command:
 
 ```bash
-docker run --rm -ti -v $PWD:/app travissouth/gitup --help
+docker run --rm -ti -v $PWD:/app travissouth/gitup list
+```
+
+To add config, run the docker command below:
+
+```bash
+docker run --rm -ti -v $PWD:/app travissouth/gitup add
 ```
