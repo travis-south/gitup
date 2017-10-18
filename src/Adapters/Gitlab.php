@@ -73,7 +73,8 @@ class Gitlab implements AdapterInterface
                 'fulfilled' => function ($response, $index) {
                     $this->logger->info(sprintf('Successfully executed index %s', $index));
                     $response = json_decode($response->getBody());
-                    $this->dumper->info($response);
+                    if($response)
+                        $this->dumper->info($response);
                 },
                 'rejected' => function ($reason, $index) {
                     $errorBody = $reason->getResponseBodySummary($reason->getResponse());
