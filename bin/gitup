@@ -12,6 +12,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use TravisSouth\Gitup\Console\Command\UpdateCommand;
 use TravisSouth\Gitup\Console\Command\AddCommand;
 use TravisSouth\Gitup\Console\Command\GetCommand;
+use TravisSouth\Gitup\Console\Command\GetAllCommand;
 use TravisSouth\Gitup\Console\Command\RemoveCommand;
 use TravisSouth\Gitup\Console\ErrorHandler;
 
@@ -36,6 +37,7 @@ $dispatcher->addListener(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $
 $updateCommand = new UpdateCommand();
 $addCommand = new AddCommand();
 $getCommand = new GetCommand();
+$getAllCommand = new GetAllCommand();
 $removeCommand = new RemoveCommand();
 
 $application = new Application('Gitup', '@package_version@');
@@ -43,6 +45,7 @@ $application->setDispatcher($dispatcher);
 $application->add($updateCommand);
 $application->add($addCommand);
 $application->add($getCommand);
+$application->add($getAllCommand);
 $application->add($removeCommand);
 
 $application->run();

@@ -20,11 +20,13 @@ class Gitlab implements AdapterInterface
 
     private $endpoint;
 
-    private $requests = [];
+    private $results = [];
 
     private $logger;
 
     private $dumper;
+
+    private $queryString = null;
 
     public function __construct(LoggerInterface $logger, DumperInterface $dumper)
     {
@@ -72,8 +74,10 @@ class Gitlab implements AdapterInterface
                 'concurrency' => self::CONCURRENCY,
                 'fulfilled' => function ($response, $index) {
                     $this->logger->info(sprintf('Successfully executed index %s', $index));
+                    $this->logger->debug($response->getBody());
                     $response = json_decode($response->getBody());
                     if ($response) {
+                        $this->results[$index] = $response;
                         $this->dumper->info($response);
                     }
                 },
@@ -83,6 +87,7 @@ class Gitlab implements AdapterInterface
                     $this->logger->error(sprintf('Error message: %s', $reason->getMessage()));
                     $this->logger->error(sprintf('Error code: %s', $reason->getCode()));
                     $this->logger->error(sprintf('Error body: %s', $errorBody));
+                    $this->results[$index] = $errorBody;
                 },
             ]);
 
@@ -96,13 +101,16 @@ class Gitlab implements AdapterInterface
 
     private function createRequests($lists, $method)
     {
+        $updatedPath = '';
+        if($this->queryString)
+            $updatedPath = '?' . http_build_query($this->queryString);
         foreach ($lists as $listKey => $listValue) {
-            yield function () use ($method, $listValue, $listKey) {
+            yield function () use ($method, $listValue, $listKey, $updatedPath) {
                 $path = '';
                 switch (strtoupper($method)) {
                     case 'GET':
                     case 'DELETE':
-                        $path = $listValue;
+                        $path = $listValue . $updatedPath;
                         $data = [];
                         break;
                     case 'POST':
@@ -110,19 +118,19 @@ class Gitlab implements AdapterInterface
                             'key' => $listKey,
                             'value' => $listValue
                         ];
-                        $path = '';
+                        $path = $updatedPath;
                         break;
                     case 'PUT':
                         $data = [
                             'value' => $listValue
                         ];
-                        $path = $listKey;
+                        $path = $listKey . $updatedPath;
                         break;
                     default:
                         $data = [];
-                        $path = '';
+                        $path = $updatedPath;
                 }
-                $this->logger->debug(sprintf('Endpoint = %s', $this->endpoint));
+                $this->logger->debug(sprintf('Endpoint = %s', $this->endpoint . $path));
                 $this->logger->debug(sprintf('Key = %s', $listKey));
                 $this->logger->debug(sprintf('Value = %s', $listValue));
                 return $this->client->requestAsync(strtoupper($method), $path, [
@@ -159,6 +167,37 @@ class Gitlab implements AdapterInterface
     {
         $this->logger->info('Getting configurations...');
         $this->prepareRequest($lists);
+    }
+
+    /**
+     * Retrieves all config to your git server.
+     *
+     * @return void
+     */
+    public function getAllConfig()
+    {
+        $this->logger->info('Getting all configurations...');
+        $lists = [ "blank" => "" ];
+        $this->queryString = [ 'per_page' => 200 ];
+        $this->prepareRequest($lists);
+        $this->dumper->debug($this->results);
+        $this->formatAllOutput();
+    }
+
+    private function formatAllOutput()
+    {
+        $convertedArray = [];
+        $tabbedOutput = '';
+        foreach ($this->results[0] as $result) {
+            $this->dumper->debug('inside results');
+            $this->dumper->debug($result);
+            $convertedArray[$result->key] = $result->value;
+            $tabbedOutput .= $result->key . "\t" . $result->value . "\n";
+        }
+        $this->dumper->debug($convertedArray);
+        $keyValueJson = json_encode($convertedArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+        $this->dumper->info($tabbedOutput);
+        $this->dumper->info($keyValueJson);
     }
 
     /**
