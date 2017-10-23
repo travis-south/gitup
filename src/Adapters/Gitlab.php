@@ -178,10 +178,13 @@ class Gitlab implements AdapterInterface
     {
         $this->logger->info('Getting all configurations...');
         $lists = [ "blank" => "" ];
-        $this->queryString = [ 'per_page' => 200 ];
-        $this->prepareRequest($lists);
-        $this->dumper->debug($this->results);
-        $this->formatAllOutput();
+        $pages = 2;
+        for($ctr = 1; $ctr <= $pages; $ctr++) {
+            $this->queryString = [ 'page' => $ctr, 'per_page' => 100 ];
+            $this->prepareRequest($lists);
+            $this->dumper->debug($this->results);
+            $this->formatAllOutput();
+        }
     }
 
     private function formatAllOutput()
