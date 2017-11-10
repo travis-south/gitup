@@ -105,7 +105,7 @@ class Gitlab implements AdapterInterface
         if($this->queryString)
             $updatedPath = '?' . http_build_query($this->queryString);
         foreach ($lists as $listKey => $listValue) {
-            yield function () use ($method, $listValue, $listKey, $updatedPath) {
+            yield $listKey => function () use ($method, $listValue, $listKey, $updatedPath) {
                 $path = '';
                 switch (strtoupper($method)) {
                     case 'GET':
@@ -191,7 +191,7 @@ class Gitlab implements AdapterInterface
     {
         $convertedArray = [];
         $tabbedOutput = '';
-        foreach ($this->results[0] as $result) {
+        foreach ($this->results['blank'] as $result) {
             $this->dumper->debug('inside results');
             $this->dumper->debug($result);
             $convertedArray[$result->key] = $result->value;
